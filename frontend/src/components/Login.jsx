@@ -1,0 +1,189 @@
+/*import React, { useState } from "react"; 
+import axios from "axios";
+
+const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      // Call backend login API
+      const res = await axios.post("http://localhost:5000/l", {
+        email,
+        password,
+      });
+
+      if (res.data.success) {
+        alert(res.data.message);
+        // Optional: store token and redirect
+        localStorage.setItem("token", res.data.token);
+        window.location.href = "/dashboard";
+      } else {
+        alert(res.data.message); // show error from backend
+      }
+    } catch (err) {
+      alert(err.response?.data?.message || "Login failed");
+    }
+  };
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      style={{
+        background: "white",
+        padding: "30px",
+        borderRadius: "20px",
+        boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
+        display: "flex",
+        flexDirection: "column",
+        gap: "15px",
+        width: "100%",
+        maxWidth: "400px",
+      }}
+    >
+      <h2 style={{ textAlign: "center" }}>Login</h2>
+
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+        style={{ padding: "14px", borderRadius: "10px", border: "1px solid #ccc" }}
+      />
+
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+        style={{ padding: "14px", borderRadius: "10px", border: "1px solid #ccc" }}
+      />
+
+      <button
+        type="submit"
+        style={{
+          padding: "14px",
+          borderRadius: "10px",
+          background: "#007bff",
+          color: "white",
+          border: "none",
+          cursor: "pointer",
+        }}
+      >
+        Login
+      </button>
+
+      
+      <p style={{ textAlign: "center", marginTop: "10px" }}>
+        Don’t have an account?{" "}
+        <a href="/s" style={{ color: "#007bff", textDecoration: "none" }}>
+          Register
+        </a>
+      </p>
+    </form>
+  );
+};
+
+export default Login;*/
+
+
+
+
+import React, { useState } from "react"; 
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await axios.post("http://localhost:5000/l", {
+        email,
+        password,
+      });
+
+      if (res.data.success) {
+        alert(res.data.message);
+
+        // store token and user info
+        localStorage.setItem("token", res.data.token || "dummy_token"); 
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+
+        navigate("/dashboard"); // navigate to dashboard
+      } else {
+        alert(res.data.message);
+      }
+    } catch (err) {
+      alert(err.response?.data?.message || "Login failed");
+    }
+  };
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      style={{
+        background: "white",
+        padding: "30px",
+        borderRadius: "20px",
+        boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
+        display: "flex",
+        flexDirection: "column",
+        gap: "15px",
+        width: "100%",
+        maxWidth: "400px",
+      }}
+    >
+      <h2 style={{ textAlign: "center" }}>Login</h2>
+
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+        style={{ padding: "14px", borderRadius: "10px", border: "1px solid #ccc" }}
+      />
+
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+        style={{ padding: "14px", borderRadius: "10px", border: "1px solid #ccc" }}
+      />
+
+      <button
+        type="submit"
+        style={{
+          padding: "14px",
+          borderRadius: "10px",
+          background: "#007bff",
+          color: "white",
+          border: "none",
+          cursor: "pointer",
+        }}
+      >
+        Login
+      </button>
+
+      <p style={{ textAlign: "center", marginTop: "10px" }}>
+        Don’t have an account?{" "}
+        <a href="/s" style={{ color: "#007bff", textDecoration: "none" }}>
+          Register
+        </a>
+      </p>
+    </form>
+  );
+};
+
+export default Login;
