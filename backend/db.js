@@ -25,7 +25,7 @@ const db = new Pool({
   user: "postgres",         // your PostgreSQL username
   host: "localhost",
   database: "mern_db",      // your PostgreSQL DB name
-  password: "hadiyamk",     // your PostgreSQL password
+  password: "",     // your PostgreSQL password
   port: 5432,               // default PostgreSQL port
 });
 
