@@ -39,6 +39,7 @@ import Navbar from "./components/Navbar";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Dashboard from "./components/Dashboard"; // import dashboard
+import ForgotPassword from "./components/Forgotpassword";
 
 const App = () => {
   // ProtectedRoute component to check if user is logged in
@@ -77,6 +78,7 @@ const App = () => {
             }
           />
           <Route path="*" element={<Navigate to="/l" replace />} />
+           <Route path="/forgot-password" element={<ForgotPassword />} />
         </Routes>
       </div>
     </div>
