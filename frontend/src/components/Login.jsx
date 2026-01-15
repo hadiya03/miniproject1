@@ -114,11 +114,10 @@ const Login = () => {
       if (res.data.success) {
         alert(res.data.message);
 
-        // store token and user info
         localStorage.setItem("token", res.data.token || "dummy_token"); 
         localStorage.setItem("user", JSON.stringify(res.data.user));
 
-        navigate("/dashboard"); // navigate to dashboard
+        navigate("/dashboard");
       } else {
         alert(res.data.message);
       }
@@ -162,6 +161,20 @@ const Login = () => {
         style={{ padding: "14px", borderRadius: "10px", border: "1px solid #ccc" }}
       />
 
+      {/* 🔹 Forgot Password link */}
+      <div style={{ textAlign: "right" }}>
+        <a
+          href="/forgot-password"
+          style={{
+            fontSize: "14px",
+            color: "#007bff",
+            textDecoration: "none",
+          }}
+        >
+          Forgot password?
+        </a>
+      </div>
+
       <button
         type="submit"
         style={{
@@ -187,3 +200,4 @@ const Login = () => {
 };
 
 export default Login;
+
