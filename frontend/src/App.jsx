@@ -40,6 +40,11 @@ import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Dashboard from "./components/Dashboard"; // import dashboard
 import ForgotPassword from "./components/Forgotpassword";
+import ResetPassword from "./components/ResetPassword";
+
+
+
+
 
 const App = () => {
   // ProtectedRoute component to check if user is logged in
@@ -69,6 +74,7 @@ const App = () => {
         <Routes>
           <Route path="/l" element={<Login />} />
           <Route path="/s" element={<Signup />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route
             path="/dashboard"
             element={
@@ -77,8 +83,8 @@ const App = () => {
               </ProtectedRoute>
             }
           />
-          <Route path="*" element={<Navigate to="/l" replace />} />
            <Route path="/forgot-password" element={<ForgotPassword />} />
+           <Route path="*" element={<Navigate to="/l" replace />} />
         </Routes>
       </div>
     </div>

@@ -24,7 +24,7 @@ const { Pool } = require("pg");
 const db = new Pool({
   user: "postgres",         // your PostgreSQL username
   host: "localhost",
-  database: "mern_db",      // your PostgreSQL DB name
+  database: "mini",      // your PostgreSQL DB name
   password: "",     // your PostgreSQL password
   port: 5432,               // default PostgreSQL port
 });

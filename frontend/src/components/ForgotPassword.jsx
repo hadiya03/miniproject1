@@ -1,16 +1,23 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [msg, setMsg] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       await axios.post("http://localhost:5000/forgot-password", { email });
-      setMsg("Reset link sent to your email");
+      setMsg("OTP sent to your email");
+
+       setTimeout(() => {
+        navigate("/reset-password", { state: { email } });
+      }, 1500);
+
     } catch (err) {
       setMsg("Email not found");
     }
@@ -51,7 +58,7 @@ const ForgotPassword = () => {
           border: "none",
         }}
       >
-        Send Reset Link
+        Send OTP
       </button>
 
       {msg && <p style={{ textAlign: "center", color: "green" }}>{msg}</p>}

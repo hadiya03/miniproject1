@@ -1308,3 +1308,84 @@ router.post("/l", async (req, res) => {
 
 module.exports = router;
 
+// ---------------------------
+// FORGOT PASSWORD → /forgot-password
+// ---------------------------
+router.post("/forgot-password", async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const userCheck = await db.query(
+      "SELECT * FROM users WHERE email = $1 AND is_verified = true",
+      [email]
+    );
+
+    if (userCheck.rows.length === 0) {
+      return res.status(404).json({ message: "Email not found" });
+    }
+
+    const resetOtp = String(Math.floor(100000 + Math.random() * 900000));
+    const expiry = new Date(Date.now() + 10 * 60 * 1000); // 10 min
+
+    await db.query(
+      "UPDATE users SET reset_otp = $1, reset_otp_expiry = $2 WHERE email = $3",
+      [resetOtp, expiry, email]
+    );
+
+    const mailOptions = {
+      from: "miniproject783@gmail.com",
+      to: email,
+      subject: "Password Reset OTP",
+      text: `Your password reset OTP is ${resetOtp}. It is valid for 10 minutes.`,
+    };
+
+    transporter.sendMail(mailOptions, (err) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({ message: "Email failed" });
+      }
+
+      res.json({ message: "Reset OTP sent to email" });
+    });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// ---------------------------
+// RESET PASSWORD → /reset-password
+// ---------------------------
+router.post("/reset-password", async (req, res) => {
+  const { email, otp, newPassword } = req.body;
+
+  try {
+    const result = await db.query(
+      `SELECT * FROM users 
+       WHERE email = $1 
+       AND reset_otp = $2 
+       AND reset_otp_expiry > NOW()`,
+      [email, otp]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(400).json({ message: "Invalid or expired OTP" });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    await db.query(
+      `UPDATE users 
+       SET password = $1, reset_otp = NULL, reset_otp_expiry = NULL 
+       WHERE email = $2`,
+      [hashedPassword, email]
+    );
+
+    res.json({ message: "Password reset successful" });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
